@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "470194052394",
+    "firebase_url": "https://rcciittechapp.firebaseio.com",
+    "project_id": "rcciittechapp",
+    "storage_bucket": "rcciittechapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470194052394:android:a707a4a19e58ac39be1253",
+        "android_client_info": {
+          "package_name": "com.hummbletech.techclubrcciit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470194052394-shgtfbf3inljqj103tmmm9cbbbe1heij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hummbletech.techclubrcciit",
+            "certificate_hash": "906cd8036841a34a403317649a40639032a056e7"
+          }
+        },
+        {
+          "client_id": "470194052394-4m3kn5n23srt85khcoi8dnl4smslskmk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCT-F03-Fs_F6y96tK_yZ715iweTkTiPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470194052394-4m3kn5n23srt85khcoi8dnl4smslskmk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
