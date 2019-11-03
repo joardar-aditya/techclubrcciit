@@ -1,5 +1,6 @@
 package com.hummbletech.techclubrcciit;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,13 +19,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SigninActivity extends AppCompatActivity {
 
 
     GoogleSignInClient signInClient;
     private static int RC_SIGN_IN = 007;
+    private FirebaseAuth mAuth;
 
     Intent start;
 
@@ -32,6 +40,8 @@ public class SigninActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
+
+
 
 
         start = new Intent(SigninActivity.this, MainActivity.class);
@@ -42,7 +52,10 @@ public class SigninActivity extends AppCompatActivity {
         set.setTarget(welcome_text);
         set.start();
 
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken("<Web token Id>").requestEmail().build();
 
         signInClient = GoogleSignIn.getClient(this, options);
 
@@ -74,8 +87,8 @@ public class SigninActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null){
             startActivity(start);
         }
     }
@@ -84,8 +97,7 @@ public class SigninActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(getBaseContext(), "Welcome " + account.getDisplayName(),Toast.LENGTH_SHORT).show();
-            startActivity(start);
+            firebaseAuthWithGoogle(account);
 
             // Signed in successfully, show authenticated UI.
 
@@ -94,5 +106,29 @@ public class SigninActivity extends AppCompatActivity {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("ERROR", "signInResult:failed code=" + e.getStatusCode());
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d("Firebase Init", "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Firebase Success", "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(getBaseContext(), "Welcome "+ user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            startActivity(start);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("Firebase failed", "signInWithCredential:failure", task.getException());
+                        }
+
+                        // ...
+                    }
+                });
     }
 }
