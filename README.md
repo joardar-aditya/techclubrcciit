@@ -9,7 +9,7 @@ Please <b> DONOT </b> commit any personal information in the application like fi
 ### Goals for now -:
 
 <ul>
-  <li> Integrating user sign in page using Google Signin </li>
+  <li> <s>Integrating user sign in page using Google Signin</s></li>
   <li> The Home page will contain latest updates </li>
   <li> Pages for blogs </li>
   <li> A random chat room for the members </li>
